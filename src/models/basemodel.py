@@ -3,6 +3,8 @@ import tornado.gen
 import re
 
 class BaseModel:
+    connection = None
+
     def is_int(data):
         assert isinstance(data, (int, float)), "Must be a number"
 
@@ -108,8 +110,9 @@ class BaseModel:
         except:
             print "Table '{0}' already exist".format(self.__class__.__name__)
 
-    def get(self, criteria={}):
-        yield r.table(self.__class__.__name__).filter(criteria)
+    @tornado.gen.coroutine
+    def get(self, conn, criteria={}):
+        r.table(self.__class__.__name__).filter(criteria).run(conn)
 
     def verify(self, data):
         return list(check_data(data, fields(), requiredFields()))
