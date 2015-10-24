@@ -25,4 +25,4 @@ def init():
     Target().init(conn)
 
 
-ioloop.IOLoop().instance().add_callback(init)
+# ioloop.IOLoop().instance().add_callback(init)
