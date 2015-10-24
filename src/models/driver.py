@@ -8,6 +8,7 @@ from target import Target
 DB = "phishmonger"
 
 r.set_loop_type("tornado")
+
 connection = r.connect(host='localhost', port=28015)
 
 @gen.engine

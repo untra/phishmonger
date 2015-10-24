@@ -1,0 +1,16 @@
+<table>
+  <tr>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Email</th>
+    <th>Group</th>
+  </tr>
+  {% for target in targets %}
+  <tr>
+<td>{{ target.fname }}</td>
+<td>{{ target.lname }}</td>
+<td>{{ target.email }}</td>
+<td>{{ target.group }}</td>
+  </tr>
+  {% end %}
+</table>
