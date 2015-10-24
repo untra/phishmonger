@@ -1,5 +1,4 @@
-
-## Incentivizing Corporate Chores
+# Incentivizing Corporate Chores
 
 How does a corporation get people to care about boring things like security? Tie it to financial incentives for employees.
 
