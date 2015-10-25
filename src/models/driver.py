@@ -5,6 +5,7 @@ from tornado import ioloop
 # import classes within the same directory
 from target import Target
 from campaign import Campaign
+from response import Response
 
 r.set_loop_type("tornado")
 
