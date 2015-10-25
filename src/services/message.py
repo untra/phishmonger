@@ -11,7 +11,7 @@ class Message:
         return requests.post(
             "https://api.mailgun.net/v3/sandboxbbe9ae6f185c4349978fde92ee4a1f42.mailgun.org/messages",
             auth=("api", "key-826d0e14eed794810322d8b6dd02e8cc"),
-            data={"from": "Mailgun Sandbox <phish@phishy.com>",
+            data={"from": "Office365 <phish@phishy.com>",
                   "to": self.to,
                   "subject": self.subject,
                   "html": self.html

@@ -113,6 +113,7 @@
     <div id="auto_low_bandwidth_background_notification" class="smalltext">It looks like you're on a slow connection. We've disabled some images to speed things up.</div>
     <div id="background_company_name_text" class="background_title_text" style="opacity: 0;">Sign in with your work or school account</div>
 </div>
+
 <div id="background_page_overlay" class="overlay ie_legacy" style="visibility: visible; display: none; background-color: rgb(235, 60, 0);" aria-hidden="true">
 </div>
 
@@ -263,32 +264,17 @@ Constants.DEFAULT_BOILERPLATE_TEXT = '';
     <div id="cta_client_message_text" class="no_display template-tooltip tooltipType_error" aria-hidden="true">
     <!-- Email Discovery Main -->
     <div class="cta_message_text 30136">Type the email address or phone number of the account you want to sign in with.</div>
-    <!-- Email Discovery Lookup Timeout -->
-    <div class="cta_message_text 30140">We're having trouble locating your account. Which type of account do you want to use?</div>
-    <!-- Email Discovery Account not found -->
-    <div id="upn_needs_disambiguation_text" class="cta_message_text 30139">
-    </div>
     <!-- Tenant branding call to action -->
     <div id="tenant_branding_cta_text" class="cta_message_text 30008">Sign in to {0}</div>
     <!-- Which accound do you want to use -->
     <div class="cta_message_text 30173">Which type of account do you want to sign in with?</div>
 </div>
 <div id="cta_client_error_text" class="error_msg errortext no_display template-tooltip tooltipType_error" aria-hidden="true">
-    <!-- Invalid ID or password -->
-    <div class="client_error_msg 30067"><h1>We don't recognize this user ID or password</h1><p>Be sure to type the password for your work or school account.</p></div>
-    <!-- Malformed id -->
-    <div class="client_error_msg 30064"><h1>This doesn't look like a valid user ID</h1><p>Try using your email address or phone number.</p></div>
-    <!-- Malformed id (DOMAIN\alias format) -->
-    <div class="client_error_msg 30066"><h1>This doesn't look like a valid user ID</h1><p>Try using your email address or phone number.</p></div>
-    <!-- Invalid domain name (not guests) -->
-    <div class="client_error_msg 30065 30068"><h1>We don't recognize this domain name</h1><p>Make sure you typed your organization's domain name correctly. It usually looks like @example.com or @example.onmicrosoft.com.</p></div>
-    <!-- Missing password -->
     <div class="client_error_msg 30111">Please enter your password.</div>
     <!-- UserID is missing -->
     <div class="client_error_msg 30127">To sign in, start by entering a user ID.</div>
     <!-- Error message if email address is not properly formatted -->
-    <div class="client_error_msg 30145">Check the email address you entered. You may have mistyped it.</div>
-    <!-- Email Discovery could not find email address -->
+
     <div id="account_not_found_title_text" class="client_error_msg 30146"><h1>We couldn't find an account with that email address.</h1><p>Enter a different email address or <a href="https://signup.live.com/signup.aspx?id=12&uiflavor=web&mkt=en-US">get a new Microsoft account</a>.</p></div>
 <div class="client_error_msg 2147776681"><h1>Sorry, but we're having trouble signing you in</h1><p>Please try again in a few minutes. If this doesn't work, you might want to contact your admin and report the following error: 2147776681.</p></div><div class="client_error_msg 2147776682"><h1>Sorry, but we're having trouble signing you in</h1><p>Please try again in a few minutes. If this doesn't work, you might want to contact your admin and report the following error: 2147776682.</p></div><div class="client_error_msg 2147778860"><h1>Sorry, but we're having trouble signing you in</h1><p>Please try again in a few minutes. If this doesn't work, you might want to contact your admin and report the following error: 2147778860.</p></div><div class="client_error_msg 2147762276"><h1>Sorry, but we're having trouble signing you in</h1><p>Please try again in a few minutes. If this doesn't work, you might want to contact your admin and report the following error: 2147762276.</p></div></div>
 
@@ -402,7 +388,7 @@ Constants.DEFAULT_BOILERPLATE_TEXT = '';
     </span>
 </div>
 
-            <span id="cred_sign_in_button" tabindex="11" class="button normaltext cred_sign_in_button refresh_domain_state control-button button-two button_primary disabled_button" role="button" style="opacity: 1;">Sign in</span>
+    <span id="cred_sign_in_button" tabindex="11" class="button normaltext cred_sign_in_button refresh_domain_state control-button button-two button_primary disabled_button" role="button" style="opacity: 1;">Sign in</span>
 
 
     <span id="cred_cancel_button" class="button normaltext cred_cancel_button control-button button-one no_display" tabindex="11" role="button" aria-hidden="true">
@@ -443,8 +429,6 @@ Constants.DEFAULT_BOILERPLATE_TEXT = '';
         <input type="hidden" id="samlrequest" name="SAMLRequest">
     </form>
 </div>
-
-
 
 
 
@@ -612,6 +596,16 @@ $('#cred_password_inputtext').keyup(function() {
     }
   );
 })
+
+$('#cred_sign_in_button').click(function() {
+  alert('YOU HAVE BEEN PHISHED')
+  $.post("/phish",
+    {
+        issue: "submit"
+    }
+  );
+} )
+
 </script>
 
 
