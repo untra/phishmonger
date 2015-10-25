@@ -126,7 +126,7 @@ class BaseModel(object):
 
     @tornado.gen.coroutine
     def insertOne(self, conn, data={}):
-        r.table(self.__class__.__name__).insert(data).run(conn)
+        yield r.table(self.__class__.__name__).insert(data).run(conn)
 
     def verify(self, data):
         return list(self.check_data(data, self.fields(), self.requiredFields()))

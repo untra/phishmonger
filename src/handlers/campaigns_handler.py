@@ -80,16 +80,47 @@ class CampaignsHandler(tornado.web.RequestHandler):
         Campaign().get(conn, {'id':id})
 
 
-    def launchCampaign(self, campaign, targets):
-        now = datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Y')
-        name = data['name']
-        data['date_started'] = now
+    @tornado.gen.coroutine
+    def launchCampaign(self, data):
+        pass
+
+
+
+    @tornado.gen.coroutine
+    def buildResponses(self, campaign_id, target_group):
+        responses = []
+        conn = yield connection
+        cursor = yield r.table('Target').get.run(conn)
+        while (yield cursor.fetch_next()):
+            target = yield cursor.next()
+            response = self.buildResponse(campaign_id, target['id'])
+            response_id = response["generated_keys"][0]
+            responses.append(response_id)
+        responses
+
+
+
+    @tornado.gen.coroutine
+    def buildResponse(self, campaign_id, target_id):
+        # now = datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Y')
+        data = {
+            'campaign_id' : campaign_id,
+            'target_id' : target_id,
+            'status' : 0
+        }
+        conn = yield connection
+        response = yield Response().insertOne(conn, data)
+        print response
+        yield response
+
+
 
 
     @tornado.gen.coroutine
     def newCampaign(self, data):
         conn = yield connection
-        Campaign().insertOne(conn, data)
+        yield Campaign().insertOne(conn, data)
+
 
     @tornado.gen.coroutine
     def listCampaigns(self):

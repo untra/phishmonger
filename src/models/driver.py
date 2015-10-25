@@ -23,6 +23,7 @@ def init():
     print "Initializing tables"
     Target().init(conn)
     Campaign().init(conn)
+    Response().init(conn)
 
 
 # ioloop.IOLoop().instance().add_callback(init)
