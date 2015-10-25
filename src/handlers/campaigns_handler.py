@@ -33,7 +33,12 @@ class CampaignsHandler(tornado.web.RequestHandler):
         if campaigns is None:
             messages.append('No Campaigns to Display!')
             campaigns = []
-        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb=verb, campaign_id=campaign_id)
+        arr = []
+        cursor = yield r.table('Campaign').run(conn)
+        while (yield cursor.fetch_next()):
+            campaign = yield cursor.next()
+            arr.append({'label':campaign['name'], 'value':campaign.get('points',0)})
+        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb=verb, campaign_id=campaign_id, graph=arr)
 
 
     @tornado.gen.coroutine
@@ -59,7 +64,12 @@ class CampaignsHandler(tornado.web.RequestHandler):
         if campaigns is None:
             messages.append('No Campaigns to Display!')
             campaigns = []
-        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb="Create New Campaign", campaign_id=campaign_id)
+        arr = []
+        cursor = yield r.table('Campaign').run(conn)
+        while (yield cursor.fetch_next()):
+            campaign = yield cursor.next()
+            arr.append({'label':campaign['name'], 'value':campaign.get('points',0)})
+        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb="Create New Campaign", campaign_id=campaign_id, graph=arr)
 
     def getSpecificCampaign(self, default=''):
         return {
@@ -83,17 +93,28 @@ class CampaignsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def campaignTargets(self, campaign):
         conn = yield connection
-        print campaign
         responses = campaign['responses']
         info = []
         cursor = yield r.table("Response").get_all(*responses).run(conn)
+        points = 0
         while (yield cursor.fetch_next()):
             response = yield cursor.next()
             status = response['status']
             target_id = response['target_id']
             target = yield r.table('Target').get(target_id).run(conn)
+            points += target.get('points', 0)
             info.append(target)
         yield r.table("Campaign").get(campaign['id']).update({'target_info' : info}).run(conn)
+        yield r.table("Campaign").get(campaign['id']).update({'points' : points}).run(conn)
+
+    # @tornado.gen.coroutine
+    # def dictPoints(self):
+    #     arr = []
+    #     conn = yield connection
+    #     cursor = yield r.table('Campaign').run(conn)
+    #     while (yield cursor.fetch_next()):
+    #         campaign = yield cursor.next()
+    #         arr.append({'label':campaign['name'], 'value':campaign.get('points',0)})
 
 
 

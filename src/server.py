@@ -27,6 +27,12 @@ def update_responses():
                 response_change = yield feed.next()
                 print 'response CCHHAANGGEE'
                 print response_change
+                points = response_change['new_val']['points']
+                target_id = response_change['new_val']['target_id']
+                campaign_id = response_change['new_val']['campaign_id']
+                yield r.table("Campaign").get(campaign_id).update({"points": (r.row["points"]+points).default(0)}).run(conn)
+                yield r.table("Target").get(target_id).update({"points": (r.row["points"]+points).default(0)}).run(conn)
+
         except:
             pass
 

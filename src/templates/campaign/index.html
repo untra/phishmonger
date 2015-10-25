@@ -9,6 +9,7 @@
     <th>Campaign Name</th>
     <th>Date Started</th>
     <th>Targets</th>
+    <th>Points</th>
   </tr>
   {% for campaign in campaigns %}
   <tr>
@@ -16,6 +17,7 @@
 <td><a href="/campaigns/{{ campaign['id'] }}">{{ campaign.get('name', '') }}</a></td>
 <td>{{ campaign.get('date_started', 'now') }}</td>
 <td>{{ campaign.get('targets', '') }}</td>
+<td>{{ campaign.get('points', 0) }}</td>
   </tr>
   {% end %}
 </table>
@@ -30,6 +32,7 @@
     <th>Group</th>
     <th>Email</th>
     <th>Telephone</th>
+    <th>Points</th>
   </tr>
 {% for info in campaigns[0].get('target_info', []) %}
   <tr>
@@ -39,6 +42,7 @@
 <td>{{ info['group'] }}</td>
 <td>{{ info['email'] }}</td>
 <td>{{ info.get('phone', '') }}</td>
+<td>{{ info.get('points', 0) }}</td>
   </tr>
   {% end %}
 </table>
