@@ -94,8 +94,6 @@ class TargetHandler(tornado.web.RequestHandler):
         if targets is None:
             messages.append('No Targets to Display!')
             targets = []
-<<<<<<< HEAD
-
         arr = []
         cursor = yield r.table('Target').run(conn)
         while (yield cursor.fetch_next()):
@@ -104,7 +102,6 @@ class TargetHandler(tornado.web.RequestHandler):
             arr.append(target_entry)
         campaigncount = yield r.table('Campaign').count().run(conn)
         self.render('target/index.html', targets=targets, messages=messages, name=name, verb="Create New Target", specific=self.getSpecificTarget(),graph=arr)
->>>>>>> f4b9e3bfacc122cb84febad0e0b6e128e6908f16
 
     def getSpecificTarget(self, default=''):
         return {
