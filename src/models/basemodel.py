@@ -2,7 +2,7 @@ import rethinkdb as r
 import tornado.gen
 import re
 
-class BaseModel:
+class BaseModel(object):
     connection = None
 
     def is_int(data):
@@ -22,6 +22,12 @@ class BaseModel:
 
     def is_string(data):
         assert isinstance(data, (str, unicode)), "Must be a string"
+
+    def cannot_be_empty(data):
+        assert len(data) != 0, "data cannot be empty"
+
+    def cannot_be_none(data):
+        assert data is not None, "data cannot be None"
 
     def is_valid_email(data):
         assert re.match(r"^[A-Za-z0-9\.\+_-]+@[A-Za-z0-9\._-]+\.[a-zA-Z]*$", data) is not None, "Must be a valid email address"
@@ -80,7 +86,7 @@ class BaseModel:
                 raise Exception("Not all elements satisfy: {}".format(e))
         return _list_check
 
-    def check_data(data, fields, required_fields=[]):
+    def check_data(self, data, fields, required_fields=[]):
         for field in required_fields:
             if field not in data:
                 yield (field, 'Missing field: {}'.format(field))
@@ -96,10 +102,10 @@ class BaseModel:
                         else:
                             yield (key, "{}: {}".format(key, e))
 
-    def fields():
+    def fields(self):
         {'id' : (is_string, )}
 
-    def requiredFields():
+    def requiredFields(self):
         ['id']
 
     @tornado.gen.coroutine
@@ -111,12 +117,16 @@ class BaseModel:
             print "Table '{0}' already exist".format(self.__class__.__name__)
 
     @tornado.gen.coroutine
+    def getAll(self, conn, criteria={}):
+        r.table(self.__class__.__name__).run(conn)
+
+    @tornado.gen.coroutine
     def get(self, conn, criteria={}):
-        r.table(self.__class__.__name__).filter(criteria).run(conn)
+        yield r.table(self.__class__.__name__).filter(criteria).run(conn)
 
     @tornado.gen.coroutine
     def insertOne(self, conn, data={}):
         r.table(self.__class__.__name__).insert(data).run(conn)
 
     def verify(self, data):
-        return list(check_data(data, fields(), requiredFields()))
+        return list(self.check_data(data, self.fields(), self.requiredFields()))
