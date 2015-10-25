@@ -1,7 +1,7 @@
 from basemodel import BaseModel
 class Target(BaseModel):
     def requiredFields(self):
-        super(Target, self).fields() + ['fname', 'lname', 'email', 'group', 'tel']
+        super(Target, self).fields() + ['fname', 'lname', 'email', 'group', 'phone']
 
     def fields(self):
         print super(Target, self).fields()
@@ -10,5 +10,5 @@ class Target(BaseModel):
             'lname' : (is_string, cannot_be_empty, cannot_be_none),
             'email' : (is_string, cannot_be_empty, cannot_be_none),
             'group' : (is_string, cannot_be_empty, cannot_be_none),
-            'tel' : (is_string, ),
+            'phone' : (is_string, ),
         })

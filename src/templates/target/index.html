@@ -19,7 +19,7 @@
 <td>{{ target['lname'] }}</td>
 <td>{{ target['group'] }}</td>
 <td>{{ target['email'] }}</td>
-<td>{{ target.get('tel', '') }}</td>
+<td>{{ target.get('phone', '') }}</td>
   </tr>
   {% end %}
 </table>
@@ -35,7 +35,7 @@
   <label>email</label><br />
   <input type="email" name="email" value="{{ specific['email'] }}" required><br>
   <label>telephone</label><br />
-  <input type="tel" name="tel" value="{{ specific['tel'] }}" required><br>
+  <input type="phone" name="phone" value="{{ specific['phone'] }}" required><br>
   <input type="submit" name="submit" value="{{verb}}" class="button"><br />
   {% raw xsrf_form_html() %}
 </form>

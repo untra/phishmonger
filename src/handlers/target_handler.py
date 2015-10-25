@@ -4,15 +4,13 @@ from models.target import Target
 import models.driver as driver
 import rethinkdb as r
 
-connection = r.connect(host='localhost', port=28015)
-db = "phishmonger"
+connection = r.connect(host='localhost', port=28015, db="phishmonger")
 
 class TargetHandler(tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def get(self, instance=None):
         conn = yield connection
-        conn.use(db)
         messages = self.getMessages()
         name = ""
         verb = "Create New Target"
@@ -37,7 +35,6 @@ class TargetHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def post(self, instance=None):
         conn = yield connection
-        conn.use(db)
         messages = self.getMessages()
         name = ""
         data = self.getSpecificTarget(default=None)
@@ -65,7 +62,7 @@ class TargetHandler(tornado.web.RequestHandler):
         'lname' : self.get_argument('lname',default,strip = True),
         'email' : self.get_argument('email',default,strip = True),
         'group' : self.get_argument('group',default,strip = True),
-        'tel' : self.get_argument('tel',default,strip = True),
+        'phone' : self.get_argument('phone',default,strip = True),
         }
 
     # def delete(self, instance=None):
@@ -81,20 +78,17 @@ class TargetHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def getTarget(self, id):
         conn = yield connection
-        conn.use(db)
         Target().get(conn, {'id':id})
 
     @tornado.gen.coroutine
     def newTarget(self, data):
         conn = yield connection
-        conn.use(db)
         Target().insertOne(conn, data)
 
     @tornado.gen.coroutine
     def listTargets(self):
         targets = []
         conn = yield connection
-        conn.use(db)
         cursor = yield r.table('Target').run(conn)
         while (yield cursor.fetch_next()):
             target = yield cursor.next()

@@ -5,6 +5,7 @@ Routing configuration.
 import tornado.web
 from handlers.index_handler import IndexHandler
 from handlers.target_handler import TargetHandler
+from handlers.campaigns_handler import CampaignsHandler
 from handlers.phish_handler import PhishHandler
 
 # Tornado pro-tip: regex routing is optimized by putting more frequently
@@ -12,6 +13,7 @@ from handlers.phish_handler import PhishHandler
 routes = [
     (r"/", IndexHandler),
     (r"/targets", TargetHandler),
-    (r"/targets/([0-9]+)", TargetHandler),
-    (r"/phish", PhishHandler)
+    (r"/targets/((?:[a-f]|[0-9]|\-)+)", TargetHandler),
+    (r"/campaigns", CampaignsHandler),
+    (r"/phish/((?:[a-f]|[0-9]|\-)+)", PhishHandler)
 ]

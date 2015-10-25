@@ -114,7 +114,7 @@ class BaseModel(object):
         try:
             yield r.table_create(self.__class__.__name__).run(conn)
         except:
-            print "Table '{0}' already exist".format(self.__class__.__name__)
+            print "Table '{0}' already exists".format(self.__class__.__name__)
 
     @tornado.gen.coroutine
     def getAll(self, conn, criteria={}):

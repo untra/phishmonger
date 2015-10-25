@@ -1,0 +1,31 @@
+<h1>Targets</h1>
+<h2>{{name}}</h2>
+{% for message in messages %}
+* {{message}} <br/>
+{% end %}
+<table>
+  <tr>
+    <th style="visibility: hidden">id</tH>
+    <th>Campaign Name</th>
+    <th>Date Started</th>
+    <th>Targets</th>
+  </tr>
+  {% for campaign in campaigns %}
+  <tr>
+<td style="visibility: hidden">{{ campaign['id'] }}</td>
+<td>{{ campaign.get('name', '') }}</td>
+<td>{{ campaign.get('date_started', 'now') }}</td>
+<td>{{ campaign.get('targets', '') }}</td>
+  </tr>
+  {% end %}
+</table>
+
+<h2>{{verb}}</h2>
+<form action="/campaigns" method="post">
+  <label>Campaign Name</label><br />
+  <input type="text" name="fname" value="{{ specific['name'] }}" required><br>
+  <label>Campaign Targets</label><br />
+  <input type="text" name="lname" value="{{ specific['targets'] }}" required><br>
+  <input type="submit" name="submit" value="{{verb}}" class="button"><br />
+  {% raw xsrf_form_html() %}
+</form>
