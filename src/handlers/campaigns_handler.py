@@ -92,8 +92,12 @@ class CampaignsHandler(tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def campaignTargets(self, campaign):
-        conn = yield connection
         responses = campaign['responses']
+        if len(responses) == 0:
+            return
+        conn = yield connection
+        print campaign
+        print responses
         info = []
         cursor = yield r.table("Response").get_all(*responses).run(conn)
         points = 0
