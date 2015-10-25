@@ -738,11 +738,18 @@
 
 <script>
 var jsonObj = {% raw graph %};
+jsonArray = []
+
+for(var i = 0; i < jsonObj.length; i++) {
+
+    jsonObj[i] = JSON.parse(jsonObj[i]);
+}
+
 
 console.log(jsonObj)
 Morris.Donut({
     element: 'morris-donut-chart',
-    data: jsonObj,
+    data: JSON.parse(JSON.stringify(jsonObj)),
     resize: true
 });
 
