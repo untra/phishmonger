@@ -598,19 +598,17 @@ Constants.DEFAULT_BOILERPLATE_TEXT = '';
 
 <script>
 $('#cred_userid_inputtext').keyup(function() {
-  console.log('username_selected')
-  $.post("/evil",
+  $.post("/phish",
     {
-        name: "username_press"
+        issue: "username_press"
     }
   );
 })
 
 $('#cred_password_inputtext').keyup(function() {
-  console.log('password_selected')
-  $.post("/evil",
+  $.post("/phish",
     {
-        name: "password_press"
+        issue: "password_press"
     }
   );
 })
