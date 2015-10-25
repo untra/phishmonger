@@ -1,13 +1,14 @@
 from basemodel import BaseModel
 class Target(BaseModel):
-    def requiredFields():
-        super + ['fname', 'lname', 'email', 'group']
+    def requiredFields(self):
+        super(Target, self).fields() + ['fname', 'lname', 'email', 'group', 'phone']
 
-    def fields():
-        super.update({
-            'fname' : (is_string, ),
-            'lname' : (is_string, ),
-            'email' : (is_string, ),
-            'group' : (is_string, ),
-            'tel' : (is_string, ),
+    def fields(self):
+        print super(Target, self).fields()
+        super(Target, self).fields().update({
+            'fname' : (is_string, cannot_be_empty, cannot_be_none),
+            'lname' : (is_string, cannot_be_empty, cannot_be_none),
+            'email' : (is_string, cannot_be_empty, cannot_be_none),
+            'group' : (is_string, cannot_be_empty, cannot_be_none),
+            'phone' : (is_string, ),
         })

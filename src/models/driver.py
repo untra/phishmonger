@@ -4,12 +4,11 @@ from tornado import ioloop
 
 # import classes within the same directory
 from target import Target
-
-DB = "phishmonger"
+from campaign import Campaign
 
 r.set_loop_type("tornado")
 
-connection = r.connect(host='localhost', port=28015)
+connection = r.connect(host='localhost', port=28015, db="phishmonger")
 
 @gen.engine
 def init():
@@ -22,8 +21,9 @@ def init():
         print "database already exists"
 
     print "Initializing tables"
-    conn.use(DB)
     Target().init(conn)
+    Campaign().init(conn)
+    Response().init(conn)
 
 
 # ioloop.IOLoop().instance().add_callback(init)
