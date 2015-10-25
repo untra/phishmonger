@@ -1,0 +1,15 @@
+/*----------------------------------------------------------
+// Copyright (C) Microsoft Corporation. All rights reserved.
+//----------------------------------------------------------
+// login.hover.css
+*/
+
+.button:hover {
+  background: #D4E3FB;
+}
+
+.cred_cancel_button:hover
+{
+  background: #D6D6D6;
+  color: #000000;
+}
