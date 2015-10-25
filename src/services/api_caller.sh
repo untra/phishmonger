@@ -14,7 +14,7 @@ BODY_HASH=`echo -n $POST_DATA | openssl sha -sha256 -r | awk '{print $1;}'`
 SIGNING_KEY=`echo -n $TIMESTAMP | openssl dgst -sha256 -hex -hmac 'MODO1'$SECRET -r | awk '{print $1;}'`
 STRING_TO_SIGN=$TIMESTAMP'&'$API'&'$BODY_HASH
 SIGNATURE=`echo -n $STRING_TO_SIGN | openssl dgst -sha256 -hex -mac HMAC -macopt "hexkey:$SIGNING_KEY" -r | awk '{print $1;}'`
-curl -H 'X-Modo-Date:'$TIMESTAMP -H 'Authorization: MODO1 key='$KEY', sig='$SIGNATURE -d $POST_DATA $BASE_URL''$API  #output
+curl -s -H 'X-Modo-Date:'$TIMESTAMP -H 'Authorization: MODO1 key='$KEY', sig='$SIGNATURE -d $POST_DATA $BASE_URL''$API  #output
 }
 
 api_Call
