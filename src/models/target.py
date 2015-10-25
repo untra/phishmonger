@@ -9,4 +9,5 @@ class Target(BaseModel):
             'lname' : (is_string, ),
             'email' : (is_string, ),
             'group' : (is_string, ),
+            'tel' : (is_string, ),
         })

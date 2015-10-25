@@ -1,16 +1,39 @@
+<h1>Targets</h1>
+<h2>{{name}}</h2>
+{% for message in messages %}
+* {{message}}
+{% end %}
 <table>
   <tr>
+    <th style="visibility: hidden">id</tH>
     <th>First Name</th>
     <th>Last Name</th>
-    <th>Email</th>
     <th>Group</th>
+    <th>Email</th>
+    <th>Telephone</th>
   </tr>
   {% for target in targets %}
   <tr>
+<td style="visibility: hidden">{{ target.id }}</td>
 <td>{{ target.fname }}</td>
 <td>{{ target.lname }}</td>
-<td>{{ target.email }}</td>
 <td>{{ target.group }}</td>
+<td>{{ target.email }}</td>
+<td>{{ target.tel }}</td>
   </tr>
   {% end %}
 </table>
+
+<h2>{{verb}}</h2>
+<form action="/targets/" method="post">
+  <label>First Name</label><br />
+  <input type="text" name="fname" required><br>
+  <label>Last Name</label><br />
+  <input type="text" name="fname" required><br>
+  <label>group</label><br />
+  <input type="text" name="group" required><br>
+  <label>email</label><br />
+  <input type="email" name="email" required><br>
+  <label>telephone</label><br />
+  <input type="tel" name="tel"><br>
+</form>

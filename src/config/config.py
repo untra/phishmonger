@@ -1,7 +1,7 @@
 """
 Application configuration.
 """
-
+import os.path
 import tornado.web
 from tornado.options import define, options
 from routes import routes
@@ -11,8 +11,8 @@ SETTINGS = {
     'xsrf_cookies': True,
     'login_url': '/login',
     'autoreload': True,
-    'template_path':'templates/',
-    'static_path':'assets/',
+    'template_path':'./templates/',
+    'static_path':'./static/',
 }
 
 define("port", default=8000, help="run on the given port", type=int)
