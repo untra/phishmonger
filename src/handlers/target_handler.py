@@ -38,10 +38,9 @@ class TargetHandler(tornado.web.RequestHandler):
         messages = self.getMessages()
         name = ""
         data = self.getSpecificTarget(default=None)
-        data = {k: v for k, v in data.items() if v}
         targets = []
         if instance is None:#create
-            yield self.newTarget(data)
+            newtarget = yield r.table("Target").insert(data).run(conn)
             cursor = yield r.table('Target').run(conn)
             while (yield cursor.fetch_next()):
                 target = yield cursor.next()
@@ -79,11 +78,6 @@ class TargetHandler(tornado.web.RequestHandler):
     def getTarget(self, id):
         conn = yield connection
         Target().get(conn, {'id':id})
-
-    @tornado.gen.coroutine
-    def newTarget(self, data):
-        conn = yield connection
-        Target().insertOne(conn, data)
 
     @tornado.gen.coroutine
     def listTargets(self):
