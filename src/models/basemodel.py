@@ -114,5 +114,9 @@ class BaseModel:
     def get(self, conn, criteria={}):
         r.table(self.__class__.__name__).filter(criteria).run(conn)
 
+    @tornado.gen.coroutine
+    def insertOne(self, conn, data={}):
+        r.table(self.__class__.__name__).insert(data).run(conn)
+
     def verify(self, data):
         return list(check_data(data, fields(), requiredFields()))

@@ -12,5 +12,6 @@ from handlers.phish_handler import PhishHandler
 routes = [
     (r"/", IndexHandler),
     (r"/targets", TargetHandler),
+    (r"/targets/([0-9]+)", TargetHandler),
     (r"/phish", PhishHandler)
 ]
