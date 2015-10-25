@@ -20,6 +20,30 @@
   {% end %}
 </table>
 
+{% if campaign_id is not None %}
+<h2> targets </h2>
+<table>
+  <tr>
+    <th style="visibility: hidden">id</tH>
+    <th>First Name</th>
+    <th>Last Name</th>
+    <th>Group</th>
+    <th>Email</th>
+    <th>Telephone</th>
+  </tr>
+{% for info in campaigns[0].get('target_info', []) %}
+  <tr>
+<td style="visibility: hidden">{{ info['id'] }}</td>
+<td>{{ info['fname'] }}</td>
+<td>{{ info['lname'] }}</td>
+<td>{{ info['group'] }}</td>
+<td>{{ info['email'] }}</td>
+<td>{{ info.get('phone', '') }}</td>
+  </tr>
+  {% end %}
+</table>
+{% end %}
+
 <h2>{{verb}}</h2>
 <form action="/campaigns" method="post">
   <label>Campaign Name</label><br />

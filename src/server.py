@@ -10,6 +10,25 @@ from tornado.concurrent import Future, chain_future
 from tornado.options import define, options
 from config.config import application
 import models.driver as driver
+import rethinkdb as r
+connection = r.connect(host='localhost', port=28015, db="phishmonger")
+
+
+#Sends the new user joined alerts to all subscribers who subscribed
+@tornado.gen.coroutine
+def update_responses():
+    while True:
+        try:
+            conn = yield connection
+            feed = yield r.table("Response").changes().run(conn)
+
+            while (yield feed.fetch_next()):
+                response_change = yield feed.next()
+                print response_change
+                # for subscriber in subscribers:
+                #     subscriber.write_message(response_change)
+        except:
+            pass
 
 def main():
     tornado.options.parse_command_line()
@@ -18,7 +37,7 @@ def main():
     print "Listening for connections on... localhost:{0}".format(options.port)
     driver.init()
     tornado.ioloop.IOLoop.instance().start()
-
+    tornado.ioloop.IOLoop.current().add_callback(update_responses)
 
 if __name__ == "__main__":
     main()

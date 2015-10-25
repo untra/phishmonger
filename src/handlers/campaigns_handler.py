@@ -12,39 +12,39 @@ connection = r.connect(host='localhost', port=28015, db="phishmonger")
 class CampaignsHandler(tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
-    def get(self, instance=None):
+    def get(self, campaign_id=None):
         conn = yield connection
         messages = self.getMessages()
         name = ""
         verb = "Create New Campaign"
         campaigns = []
-        if instance is None:#index
+        if campaign_id is None:#index
             cursor = yield r.table('Campaign').run(conn)
             while (yield cursor.fetch_next()):
                 campaign = yield cursor.next()
                 campaigns.append(campaign)
         else:#read
-            campaign = yield r.table('Campaign').get(instance).run(conn)
+            campaign = yield r.table('Campaign').get(campaign_id).run(conn)
             yield self.campaignTargets(campaign)
-            campaign = yield r.table('Campaign').get(instance).run(conn)
+            campaign = yield r.table('Campaign').get(campaign_id).run(conn)
             campaigns = [campaign]
             name = "{0}".format(campaigns[0]['name'])
             verb = "Update Campaign {0}".format(name)
         if campaigns is None:
             messages.append('No Campaigns to Display!')
             campaigns = []
-        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb=verb)
+        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb=verb, campaign_id=campaign_id)
 
 
     @tornado.gen.coroutine
-    def post(self, instance=None):
+    def post(self, campaign_id=None):
         conn = yield connection
         messages = self.getMessages()
         name = ""
         data = self.getSpecificCampaign(default=None)
         data['date_started'] = datetime.datetime.now().strftime('%a %b %d %H:%M:%S %Y')
         campaigns = []
-        if instance is None:#create
+        if campaign_id is None:#create
             newcampaign = yield r.table("Campaign").insert(data).run(conn)
             self.launchCampaign(newcampaign['generated_keys'][0])
             cursor = yield r.table('Campaign').run(conn)
@@ -53,13 +53,13 @@ class CampaignsHandler(tornado.web.RequestHandler):
                 campaigns.append(campaign)
             messages.append("Successfully created campaign {0}!".format(data['name']))
         else:#update
-            campaigns = yield self.getCampaign(instance)
+            campaigns = yield self.getCampaign(campaign_id)
             name = "{0}".format(campaigns[0].name)
             messages.append("Successfully updated campaign {0}!".format(data['name']))
         if campaigns is None:
             messages.append('No Campaigns to Display!')
             campaigns = []
-        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb="Create New Campaign")
+        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb="Create New Campaign", campaign_id=campaign_id)
 
     def getSpecificCampaign(self, default=''):
         return {
@@ -70,7 +70,7 @@ class CampaignsHandler(tornado.web.RequestHandler):
 
 
 
-    # def delete(self, instance=None):
+    # def delete(self, campaign_id=None):
     #     campaigns = yield self.listCampaigns()
     #     if campaigns is None:
     #         campaigns = []
@@ -83,17 +83,17 @@ class CampaignsHandler(tornado.web.RequestHandler):
     @tornado.gen.coroutine
     def campaignTargets(self, campaign):
         conn = yield connection
+        print campaign
         responses = campaign['responses']
         info = []
-        cursor = yield r.table("Response").getAll(responses).run(conn)
+        cursor = yield r.table("Response").get_all(*responses).run(conn)
         while (yield cursor.fetch_next()):
             response = yield cursor.next()
-            print response
             status = response['status']
             target_id = response['target_id']
             target = yield r.table('Target').get(target_id).run(conn)
             info.append(target)
-        yield r.table("Campaign").get(campaign['id']).update({'targets' : info}).run(conn)
+        yield r.table("Campaign").get(campaign['id']).update({'target_info' : info}).run(conn)
 
 
 
