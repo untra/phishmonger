@@ -10,6 +10,19 @@ connection = r.connect(host='localhost', port=28015, db="phishmonger")
 
 class TargetHandler(tornado.web.RequestHandler):
 
+
+    @tornado.gen.coroutine
+    def modo(self):
+        company = account.Account({'phone': 2145426078 , 'fname':'Modo','lname':'Payments','is_modo_terms_agree':1})
+        company.add_card({ 'account_id': company.account, 'card_number': 4124939999999990, 'card_security': 123, 'expiry': 1220, 'zip_code': 80303 })
+        employees = {}
+        cursor = yield r.table('Target').run(conn)
+        while(yield cursor.fetch_next()):
+            target =  yield cursor.next()
+            employees[target['phone']] = account.Account({'phone': target['phone'], 'fname': target['fname'], 'lname': target['lname'], 'is_modo_terms_agree':1})
+        yield employees
+        self.modo_trans()
+
     @tornado.gen.coroutine
     def get(self, instance=None):
         conn = yield connection
@@ -31,15 +44,33 @@ class TargetHandler(tornado.web.RequestHandler):
         if targets is None:
             messages.append('No Targets to Display!')
             targets = []
+        campaigncount = yield r.table('Campaign').count().run(conn)
 
-        arr = []
+        company = Account({'phone': 2145426078 , 'fname':'Modo','lname':'Payments','is_modo_terms_agree':1})
+        company.add_card({ 'account_id': company.account, 'card_number': 4124939999999990, 'card_security': 123, 'expiry': 1220, 'zip_code': 80303 })
+        employees = {}
+        company_gifts = {}
+        gift_total = 0
         cursor = yield r.table('Target').run(conn)
-        while (yield cursor.fetch_next()):
-            target = yield cursor.next()
-            target_entry = json.dumps({'label':target['lname'], 'value':target.get('points',0)})
-            arr.append(target_entry)
+        while(yield cursor.fetch_next()):
+            target =  yield cursor.next()
+            employees[target['phone']] = account.Account({'phone': target['phone'], 'fname': target['fname'], 'lname': target['lname'], 'is_modo_terms_agree':1})
+            r.table('Target').get(target['id']).update({'modo_id' : employees[target['phone']].account}).run(conn)
+            company_gifts[target['phone']] = 5 - target.get('points', 0)
+            gift_total += (25 - target.get('points', 0))
 
-        self.render('target/index.html', targets=targets, messages=messages, name=name, verb=verb, specific=specific, graph=arr)
+
+        for employee in employees.keys():
+            company.send_gift({'account_id': company.account, 'gift_amount': company_gifts[employee], 'receiver_phone': employee, 'merchant_id': 'b9481461-963c-48f1-8f66-fb1ff8e84c58', 'held_gift':1})
+
+        for employee in employees.keys():
+            employees[employee].accept_gift({ 'gift_id': company.gifts[employee], 'account_id': employees[employee].account, 'accept':1 })
+
+        for employee in employees.keys():
+            employees[employee].spend_gift({'account_id': employees[employee].account, 'merchant_id': company.merchants[employee]})
+
+
+        self.render('target/index.html', targets=targets, messages=messages, name=name, verb=verb, specific=specific, campaigncount = campaigncount, gift_total=gift_total)
 
 
     @tornado.gen.coroutine
@@ -63,13 +94,13 @@ class TargetHandler(tornado.web.RequestHandler):
         if targets is None:
             messages.append('No Targets to Display!')
             targets = []
-
         arr = []
         cursor = yield r.table('Target').run(conn)
         while (yield cursor.fetch_next()):
             target = yield cursor.next()
             target_entry = json.dumps({'label':target['lname'], 'value':target.get('points',0)})
             arr.append(target_entry)
+        campaigncount = yield r.table('Campaign').count().run(conn)
         self.render('target/index.html', targets=targets, messages=messages, name=name, verb="Create New Target", specific=self.getSpecificTarget(),graph=arr)
 
     def getSpecificTarget(self, default=''):

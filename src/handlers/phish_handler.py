@@ -21,9 +21,7 @@ class PhishHandler(tornado.web.RequestHandler):
         print 'beee'
         if issue == 'username_press':
             update = yield r.table("Response").get(response_id).update({"points": (r.row["points"]+1).default(0)}).run(conn)
-            print update
         if issue == 'password_press':
             update = yield r.table("Response").get(response_id).update({"points": (r.row["points"]+1).default(0)}).run(conn)
-            print update
         if issue == 'submit':
             update = yield r.table("Response").get(response_id).update({'status' : 4}).run(conn)
