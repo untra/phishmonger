@@ -54,10 +54,16 @@ class TargetHandler(tornado.web.RequestHandler):
         cursor = yield r.table('Target').run(conn)
         while(yield cursor.fetch_next()):
             target =  yield cursor.next()
-            employees[target['phone']] = account.Account({'phone': target['phone'], 'fname': target['fname'], 'lname': target['lname'], 'is_modo_terms_agree':1})
+            employees[target['phone']] = Account({'phone': target['phone'], 'fname': target['fname'], 'lname': target['lname'], 'is_modo_terms_agree':1})
             r.table('Target').get(target['id']).update({'modo_id' : employees[target['phone']].account}).run(conn)
-            company_gifts[target['phone']] = 5 - target.get('points', 0)
-            gift_total += (25 - target.get('points', 0))
+            single_gift = 25 - target.get('points', 0)
+            if(single_gift >= 2):
+                company_gifts[target['phone']] = single_gift
+                gift_total += single_gift
+            else:
+                company_gifts[target['phone']] = 1.5
+                gift_total += 1.5
+
 
 
         for employee in employees.keys():
@@ -69,8 +75,14 @@ class TargetHandler(tornado.web.RequestHandler):
         for employee in employees.keys():
             employees[employee].spend_gift({'account_id': employees[employee].account, 'merchant_id': company.merchants[employee]})
 
+        arr = []
+        cursor = yield r.table('Target').run(conn)
+        while (yield cursor.fetch_next()):
+            target = yield cursor.next()
+            target_entry = json.dumps({'label':target['lname'], 'value':target.get('points',0)})
+            arr.append(target_entry)
 
-        self.render('target/index.html', targets=targets, messages=messages, name=name, verb=verb, specific=specific, campaigncount = campaigncount, gift_total=gift_total)
+        self.render('target/index.html', targets=targets, messages=messages, name=name, verb=verb, specific=specific, campaigncount = campaigncount, gift_total=gift_total, graph=arr)
 
 
     @tornado.gen.coroutine

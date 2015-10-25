@@ -45,8 +45,8 @@ class Account:
         POST_DATA = POST_DATA[:-1]
         os.environ['POST_DATA'] = POST_DATA
 
-        command ="API=/YiiModo/api_v2/people/register" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./api_caller.sh"
-
+        command ="API=/YiiModo/api_v2/people/register" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./services/api_caller.sh"
+        # command = "ls"
         # json = os.system(command)
         json_str = subprocess.check_output(command, shell=True)
         json_dict = json.loads(json_str)['response_data']
@@ -65,7 +65,7 @@ class Account:
         POST_DATA = POST_DATA[:-1]
         os.environ['POST_DATA'] = POST_DATA
 
-        command ="API=/YiiModo/api_v2/card/add" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./api_caller.sh"
+        command ="API=/YiiModo/api_v2/card/add" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./services/api_caller.sh"
 
         # json = os.system(command)
         json_str = subprocess.check_output(command, shell=True)
@@ -85,10 +85,12 @@ class Account:
         POST_DATA = POST_DATA[:-1]
         os.environ['POST_DATA'] = POST_DATA
 
-        command ="API=/YiiModo/api_v2/gift/send" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./api_caller.sh"
+        command ="API=/YiiModo/api_v2/gift/send" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./services/api_caller.sh"
 
         # json = os.system(command)
         json_str = subprocess.check_output(command, shell=True)
+        print "+++++++++++++++"
+        print json_str
         json_dict = json.loads(json_str)['response_data']
 
         self.gifts[post_data['receiver_phone']] = json_dict['gift_id']
@@ -107,7 +109,7 @@ class Account:
         POST_DATA = POST_DATA[:-1]
         os.environ['POST_DATA'] = POST_DATA
 
-        command ="API=/YiiModo/api_v2/gift/accept" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./api_caller.sh"
+        command ="API=/YiiModo/api_v2/gift/accept" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./services/api_caller.sh"
 
         # json = os.system(command)
         json_str = subprocess.check_output(command, shell=True)
@@ -127,7 +129,7 @@ class Account:
         POST_DATA = POST_DATA[:-1]
         os.environ['POST_DATA'] = POST_DATA
 
-        command ="API=/YiiModo/api_v2/location/visit" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./api_caller.sh"
+        command ="API=/YiiModo/api_v2/location/visit" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./services/api_caller.sh"
 
         # json = os.system(command)
         json_str = subprocess.check_output(command, shell=True)
@@ -146,7 +148,7 @@ class Account:
         POST_DATA = POST_DATA[:-1]
         os.environ['POST_DATA'] = POST_DATA
 
-        command ="API=/YiiModo/api_v2/transaction/history" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./api_caller.sh"
+        command ="API=/YiiModo/api_v2/transaction/history" + " && ACCOUNT=''" + " && POST_DATA=" + str(POST_DATA) + " && ./services/api_caller.sh"
 
         # json = os.system(command)
         json_str = subprocess.check_output(command, shell=True)

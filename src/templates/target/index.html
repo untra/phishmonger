@@ -355,7 +355,7 @@
                                     <i class="fa fa-money fa-5x"></i>
                                 </div>
                                 <div class="col-xs-9 text-right">
-                                    <div class="huge">{{gift_total}}</div>
+                                    <div class="huge">${{gift_total}}</div>
                                     <div>Amount in Use</div>
                                 </div>
                             </div>
@@ -421,7 +421,7 @@
                                 <td>{{ target['group'] }}</td>
                                 <td>{{ target['email'] }}</td>
                                 <td>{{ target.get('phone', '') }}</td>
-                                <td>{{ target.get('points', '') }}</td>
+                                <td>{{ target.get('points', '0') }}</td>
                                 </tr>
                               {% end %}
                             </table>
