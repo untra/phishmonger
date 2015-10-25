@@ -4,6 +4,7 @@ from models.target import Target
 import models.driver as driver
 import json
 import rethinkdb as r
+from services.account import Account
 
 connection = r.connect(host='localhost', port=28015, db="phishmonger")
 
@@ -104,3 +105,14 @@ class TargetHandler(tornado.web.RequestHandler):
             target = yield cursor.next()
             targets.append(target)
         targets
+
+    @tornado.gen.coroutine
+    def modo(self):
+        company = account.Account({'phone': 2145426078 , 'fname':'Modo','lname':'Payments','is_modo_terms_agree':1})
+        company.add_card({ 'account_id': company.account, 'card_number': 4124939999999990, 'card_security': 123, 'expiry': 1220, 'zip_code': 80303 })
+        employees = {}
+        cursor = yield r.table('Target').run(conn)
+        while(yield cursor.fetch_next()):
+            target =  yield cursor.next()
+            employees[target['phone']] = account.Account({'phone': target['phone'], 'fname': target['fname'], 'lname': target['lname'], 'is_modo_terms_agree':1})
+        yield employees
