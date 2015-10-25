@@ -24,9 +24,11 @@ class CampaignsHandler(tornado.web.RequestHandler):
                 campaign = yield cursor.next()
                 campaigns.append(campaign)
         else:#read
-            campaigns = yield self.getCampaign(instance)
-            specific = campaigns[0]
-            name = "{0}".format(campaigns[0].name)
+            campaign = yield r.table('Campaign').get(instance).run(conn)
+            yield self.campaignTargets(campaign)
+            campaign = yield r.table('Campaign').get(instance).run(conn)
+            campaigns = [campaign]
+            name = "{0}".format(campaigns[0]['name'])
             verb = "Update Campaign {0}".format(name)
         if campaigns is None:
             messages.append('No Campaigns to Display!')
@@ -66,6 +68,8 @@ class CampaignsHandler(tornado.web.RequestHandler):
         'targets' : self.get_argument('targets',default,strip = True),
         }
 
+
+
     # def delete(self, instance=None):
     #     campaigns = yield self.listCampaigns()
     #     if campaigns is None:
@@ -77,9 +81,25 @@ class CampaignsHandler(tornado.web.RequestHandler):
         return messages
 
     @tornado.gen.coroutine
-    def getCampaign(self, id):
+    def campaignTargets(self, campaign):
         conn = yield connection
-        Campaign().get(conn, {'id':id})
+        responses = campaign['responses']
+        info = []
+        cursor = yield r.table("Response").getAll(responses).run(conn)
+        while (yield cursor.fetch_next()):
+            response = yield cursor.next()
+            print response
+            status = response['status']
+            target_id = response['target_id']
+            target = yield r.table('Target').get(target_id).run(conn)
+            info.append(target)
+        yield r.table("Campaign").get(campaign['id']).update({'targets' : info}).run(conn)
+
+
+
+
+
+
 
     @tornado.gen.coroutine
     def launchCampaign(self, campaign_id):
