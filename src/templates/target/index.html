@@ -340,7 +340,7 @@
                         </div>
                         <a href="#">
                             <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
+                                <span class="pull-left"  href="/campaigns">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                 <div class="clearfix"></div>
                             </div>
@@ -362,7 +362,7 @@
                         </div>
                         <a href="#">
                             <div class="panel-footer">
-                                <span class="pull-left">View Details</span>
+                                <span class="pull-left"  href="targets">View Details</span>
                                 <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
                                 <div class="clearfix"></div>
                             </div>
@@ -734,18 +734,19 @@
 </body>
 
 <script>
+var jsonObj = {% raw graph %};
+jsonArray = []
+
+for(var i = 0; i < jsonObj.length; i++) {
+
+    jsonObj[i] = JSON.parse(jsonObj[i]);
+}
+
+
+console.log(jsonObj)
 Morris.Donut({
     element: 'morris-donut-chart',
-    data: [{
-        label: "Download Sales",
-        value: 12
-    }, {
-        label: "In-Store Sales",
-        value: 30
-    }, {
-        label: "Mail-Order Sales",
-        value: 20
-    }],
+    data: JSON.parse(JSON.stringify(jsonObj)),
     resize: true
 });
 
