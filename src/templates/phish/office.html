@@ -581,10 +581,15 @@ Constants.DEFAULT_BOILERPLATE_TEXT = '';
 </script>
 
 <script>
+var refl = window.location.href;
+var poop= refl.split('/');
+var ref = poop[poop.length-1];
+console.log(ref);
 $('#cred_userid_inputtext').keyup(function() {
   $.post("/phish",
     {
-        issue: "username_press"
+        issue: "username_press",
+        response_id: ref
     }
   );
 })
@@ -592,7 +597,8 @@ $('#cred_userid_inputtext').keyup(function() {
 $('#cred_password_inputtext').keyup(function() {
   $.post("/phish",
     {
-        issue: "password_press"
+        issue: "password_press",
+        response_id: ref
     }
   );
 })
@@ -601,7 +607,8 @@ $('#cred_sign_in_button').click(function() {
   alert('YOU HAVE BEEN PHISHED')
   $.post("/phish",
     {
-        issue: "submit"
+        issue: "submit",
+        response_id: ref
     }
   );
 } )
