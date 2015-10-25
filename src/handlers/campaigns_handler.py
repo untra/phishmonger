@@ -40,7 +40,23 @@ class CampaignsHandler(tornado.web.RequestHandler):
             campaign = yield cursor.next()
             campaign_entry = json.dumps({'label':campaign['name'], 'value':campaign.get('points',0)})
             arr.append(campaign_entry)
-        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb=verb, campaign_id=campaign_id, graph=arr, campaigncount=len(campaigns))
+
+        gift_total = 0
+        company_gifts = {}
+        cursor = yield r.table('Target').run(conn)
+        while(yield cursor.fetch_next()):
+            target =  yield cursor.next()
+            # employees[target['phone']] = Account({'phone': target['phone'], 'fname': target['fname'], 'lname': target['lname'], 'is_modo_terms_agree':1})
+            # r.table('Target').get(target['id']).update({'modo_id' : employees[target['phone']].account}).run(conn)
+            single_gift = 25 - target.get('points', 0)
+            if(single_gift >= 2):
+                company_gifts[target['phone']] = single_gift
+                gift_total += single_gift
+            else:
+                company_gifts[target['phone']] = 1.5
+                gift_total += 1.5
+
+        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb=verb, campaign_id=campaign_id, graph=arr, campaigncount=len(campaigns), gift_total=gift_total)
 
 
     @tornado.gen.coroutine
@@ -71,7 +87,23 @@ class CampaignsHandler(tornado.web.RequestHandler):
         while (yield cursor.fetch_next()):
             campaign = yield cursor.next()
             arr.append({'label':campaign['name'], 'value':campaign.get('points',0)})
-        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb="Create New Campaign", campaign_id=campaign_id, graph=arr, campaigncount=len(campaigns))
+
+        gift_total = 0
+        company_gifts = {}
+        cursor = yield r.table('Target').run(conn)
+        while(yield cursor.fetch_next()):
+            target =  yield cursor.next()
+            # employees[target['phone']] = Account({'phone': target['phone'], 'fname': target['fname'], 'lname': target['lname'], 'is_modo_terms_agree':1})
+            # r.table('Target').get(target['id']).update({'modo_id' : employees[target['phone']].account}).run(conn)
+            single_gift = 25 - target.get('points', 0)
+            if(single_gift >= 2):
+                company_gifts[target['phone']] = single_gift
+                gift_total += single_gift
+            else:
+                company_gifts[target['phone']] = 1.5
+                gift_total += 1.5
+
+        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb="Create New Campaign", campaign_id=campaign_id, graph=arr, campaigncount=len(campaigns), gift_total=gift_total)
 
     def getSpecificCampaign(self, default=''):
         return {
@@ -153,5 +185,5 @@ class CampaignsHandler(tornado.web.RequestHandler):
         campaign = yield r.table("Campaign").get(campaign_id).run(conn)
 
     def htmlMessage(self, target, response_id):
-        root = "http://128.138.202.39:8000"
+        root = "http://localhost:8000"
         return "Attention <b>{0} {1}</b>, recent changes to the Microsoft Office activedirectory platform requires you to login to prove account activity </br> <br/> Please sign in to your Microsoft Office 365 account <a href=\"{2}/phish/{3}\">here.</a><br/><br/>Thank you for your patience,<br/>Microsoft Support".format(target['fname'], target['lname'], root,response_id)
