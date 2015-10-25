@@ -1,7 +1,7 @@
 import requests
 import time
 
-class message:
+class Message:
     def __init__(self, to, subject, html):
         self.to = to
         self.subject = subject
@@ -16,6 +16,7 @@ class message:
                   "subject": self.subject,
                   "html": self.html
         })
+
 
 
 

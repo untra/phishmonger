@@ -1,4 +1,4 @@
-<h1>Targets</h1>
+<h1>Campaigns</h1>
 <h2>{{name}}</h2>
 {% for message in messages %}
 * {{message}} <br/>
@@ -23,9 +23,9 @@
 <h2>{{verb}}</h2>
 <form action="/campaigns" method="post">
   <label>Campaign Name</label><br />
-  <input type="text" name="fname" value="{{ specific['name'] }}" required><br>
+  <input type="text" name="name" value="" required><br>
   <label>Campaign Targets</label><br />
-  <input type="text" name="lname" value="{{ specific['targets'] }}" required><br>
+  <input type="text" name="targets" value="" required><br>
   <input type="submit" name="submit" value="{{verb}}" class="button"><br />
   {% raw xsrf_form_html() %}
 </form>
