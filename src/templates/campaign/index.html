@@ -733,21 +733,17 @@
 </body>
 
 <script>
+var jsonObj = {% raw graph %};
+
+console.log(jsonObj)
 Morris.Donut({
     element: 'morris-donut-chart',
-    data: [{
-        label: "Download Sales",
-        value: 12
-    }, {
-        label: "In-Store Sales",
-        value: 30
-    }, {
-        label: "Mail-Order Sales",
-        value: 20
-    }],
+    data: jsonObj,
     resize: true
 });
-
 </script>
 
 </html>
+
+
+{{ graph }}

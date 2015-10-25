@@ -4,6 +4,7 @@ from models.campaign import Campaign
 import models.driver as driver
 import rethinkdb as r
 import datetime
+import json
 from tornado.concurrent import Future
 from services.message import Message
 
@@ -37,7 +38,9 @@ class CampaignsHandler(tornado.web.RequestHandler):
         cursor = yield r.table('Campaign').run(conn)
         while (yield cursor.fetch_next()):
             campaign = yield cursor.next()
-            arr.append({'label':campaign['name'], 'value':campaign.get('points',0)})
+            campaign_entry = json.dumps({'label':campaign['name'], 'value':campaign.get('points',0)})
+
+            arr.append(campaign_entry)
         self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb=verb, campaign_id=campaign_id, graph=arr)
 
 
