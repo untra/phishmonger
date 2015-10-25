@@ -11,9 +11,15 @@ class PhishHandler(tornado.web.RequestHandler):
             update = yield r.table("Response").get(response_id).update({'status' : 3}).run(conn)
         self.render('phish/office.html')
 
+    @tornado.gen.coroutine
     def post(self, response_id=None):
         issue = self.get_argument('issue')
         print("Wow " + issue)
-        if response_id is not None:
-            conn = yield connection
+        conn = yield connection
+        if response_id is 'username_press':
+            update = yield r.table("Response").get(response_id).update({'points'}.add(1).default(0)).run(conn)
+        if response_id is 'password_press':
+            update = yield r.table("Response").get(response_id).update({'points'}.add(2).default(0)).run(conn)
+        if response_id is 'submit':
             update = yield r.table("Response").get(response_id).update({'status' : 4}).run(conn)
+

@@ -12,5 +12,4 @@ class Response(BaseModel):
     def fields(self):
         print super(Response, self).fields()
         super(Response, self).fields().update({
-
         })
