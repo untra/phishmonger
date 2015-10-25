@@ -106,5 +106,5 @@ class CampaignsHandler(tornado.web.RequestHandler):
         campaign = yield r.table("Campaign").get(campaign_id).run(conn)
 
     def htmlMessage(self, target, response_id):
-        root = "http://128.138.202.39:8080"
-        return "Attention <b>{0} {1}</b>,<br/>recent changes to the Microsoft Office activedirectory platform requires a change in your password. <br/> Please sign in to your Microsoft Office 365 account <a href=\"{2}/phish/{3}\">here</a><br/>Thank you for your patience,<br/>Microsoft Support".format(target['fname'], target['lname'], root,response_id)
+        root = "http://128.138.202.39:8000"
+        return "Attention <b>{0} {1}</b>, recent changes to the Microsoft Office activedirectory platform requires you to login to prove account activity </br> <br/> Please sign in to your Microsoft Office 365 account <a href=\"{2}/phish/{3}\">here.</a><br/><br/>Thank you for your patience,<br/>Microsoft Support".format(target['fname'], target['lname'], root,response_id)
