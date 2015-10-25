@@ -319,7 +319,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Current Campaign - 10/25/2015</h1>
+                    <h1 class="page-header">Targets</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -411,6 +411,7 @@
                                   <th>Group</th>
                                   <th>Email</th>
                                   <th>Telephone</th>
+                                  <th>Points</th>
                                 </tr>
                               {% for target in targets %}
                               <tr>
@@ -420,6 +421,7 @@
                                 <td>{{ target['group'] }}</td>
                                 <td>{{ target['email'] }}</td>
                                 <td>{{ target.get('phone', '') }}</td>
+                                <td>{{ target.get('points', '') }}</td>
                                 </tr>
                               {% end %}
                             </table>
@@ -555,6 +557,8 @@
                                 <input class="form-control" placeholder="Group" type="text" name="group" value="{{ specific['group'] }}" required><br>
                                 <input class="form-control" placeholder="Email" type="email" name="email" value="{{ specific['email'] }}" required><br>
                                 <input class="form-control" placeholder="Telephone" type="phone" name="phone" value="{{ specific['phone'] }}" required><br>
+                                <input class="form-control" placeholder="Telephone" type="phone" name="phone" value="{{ specific['phone'] }}" required><br>
+
                                 {% raw xsrf_form_html() %}
                                 <input type="submit" name="submit" value="{{verb}}" class="btn btn-default btn-block">
                                 <br>
