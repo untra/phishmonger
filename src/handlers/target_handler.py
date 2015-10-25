@@ -2,6 +2,7 @@ import tornado.web
 import tornado.gen
 from models.target import Target
 import models.driver as driver
+import json
 import rethinkdb as r
 from services.account import Account
 
@@ -30,7 +31,15 @@ class TargetHandler(tornado.web.RequestHandler):
         if targets is None:
             messages.append('No Targets to Display!')
             targets = []
-        self.render('target/index.html', targets=targets, messages=messages, name=name, verb=verb, specific=specific)
+
+        arr = []
+        cursor = yield r.table('Target').run(conn)
+        while (yield cursor.fetch_next()):
+            target = yield cursor.next()
+            target_entry = json.dumps({'label':target['lname'], 'value':target.get('points',0)})
+            arr.append(target_entry)
+
+        self.render('target/index.html', targets=targets, messages=messages, name=name, verb=verb, specific=specific, graph=arr)
 
 
     @tornado.gen.coroutine
@@ -54,7 +63,14 @@ class TargetHandler(tornado.web.RequestHandler):
         if targets is None:
             messages.append('No Targets to Display!')
             targets = []
-        self.render('target/index.html', targets=targets, messages=messages, name=name, verb="Create New Target", specific=self.getSpecificTarget())
+
+        arr = []
+        cursor = yield r.table('Target').run(conn)
+        while (yield cursor.fetch_next()):
+            target = yield cursor.next()
+            target_entry = json.dumps({'label':target['lname'], 'value':target.get('points',0)})
+            arr.append(target_entry)
+        self.render('target/index.html', targets=targets, messages=messages, name=name, verb="Create New Target", specific=self.getSpecificTarget(),graph=arr)
 
     def getSpecificTarget(self, default=''):
         return {

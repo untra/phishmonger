@@ -13,6 +13,7 @@ class PhishHandler(tornado.web.RequestHandler):
 
     @tornado.gen.coroutine
     def post(self, response_id=None):
+        print 'fdsafdsa'
         issue = self.get_argument('issue')
         response_id = self.get_argument('response_id', response_id)
         print("Wow " + issue)
