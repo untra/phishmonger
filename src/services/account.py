@@ -2,7 +2,25 @@ import os
 import subprocess
 import json
 
-#new_person = account.Account({'phone': 2145426078 , 'fname':'John','lname':'Travolta','is_modo_terms_agree':1})
+# Examples:
+# person1 = account.Account({'phone': 2145426078 , 'fname':'John','lname':'Travolta','is_modo_terms_agree':1})
+# person2 = account.Account({'phone': 2145426087 , 'fname':'Samuel','lname':'Jackson','is_modo_terms_agree':1})
+# person3 = account.Account({'phone': 2145426187 , 'fname':'Harvey','lname':'Keitel','is_modo_terms_agree':1})
+#
+# person1.add_card({ 'account_id': person1.account, 'card_number': 4124939999999990, 'card_security': 123, 'expiry': 1220, 'zip_code': 80303 })
+#
+# person1.send_gift({'account_id': person1.account, 'gift_amount': 25, 'receiver_phone': person2.phone, 'merchant_id': 'b9481461-963c-48f1-8f66-fb1ff8e84c58', 'held_gift':1})
+# person1.send_gift({'account_id': person1.account, 'gift_amount': 15, 'receiver_phone': person3.phone, 'merchant_id': 'b9481461-963c-48f1-8f66-fb1ff8e84c58', 'held_gift':1})
+#
+# person2.accept_gift({ 'gift_id': person1.gifts[person2.phone], 'account_id': person2.account, 'accept':1 })
+# person3.accept_gift({ 'gift_id': person1.gifts[person3.phone], 'account_id': person3.account, 'accept':1 })
+#
+# person2.spend_gift({'account_id': person2.account, 'merchant_id': person1.merchants[person2.phone]})
+# person3.spend_gift({'account_id': person3.account, 'merchant_id': person1.merchants[person3.phone]})
+#
+# person2.transaction_history({'account_id': person2.account})
+# person2.transaction_history({'account_id': person3.account})
+
 class Account:
 
     def __init__(self, post_data):
