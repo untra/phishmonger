@@ -16,6 +16,7 @@ routes = [
     (r"/targets", TargetHandler),
     (r"/targets/((?:[a-f]|[0-9]|\-)+)", TargetHandler),
     (r"/campaigns", CampaignsHandler),
+    (r"/campaigns/((?:[a-f]|[0-9]|\-)+)", CampaignsHandler),
     (r"/phish", PhishHandler),
     (r"/phish/((?:[a-f]|[0-9]|\-)+)", PhishHandler),
     (r"/webhook", WebhookHandler)
