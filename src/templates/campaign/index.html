@@ -1,4 +1,4 @@
-<h1>Campaigns</h1>
+<h1>Campaign</h1>
 <h2>{{name}}</h2>
 {% for message in messages %}
 * {{message}} <br/>
@@ -13,7 +13,7 @@
   {% for campaign in campaigns %}
   <tr>
 <td style="visibility: hidden">{{ campaign['id'] }}</td>
-<td>{{ campaign.get('name', '') }}</td>
+<td><a href="/campaigns/{{ campaign['id'] }}">{{ campaign.get('name', '') }}</a></td>
 <td>{{ campaign.get('date_started', 'now') }}</td>
 <td>{{ campaign.get('targets', '') }}</td>
   </tr>
