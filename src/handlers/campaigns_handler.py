@@ -41,7 +41,7 @@ class CampaignsHandler(tornado.web.RequestHandler):
             campaign_entry = json.dumps({'label':campaign['name'], 'value':campaign.get('points',0)})
 
             arr.append(campaign_entry)
-        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb=verb, campaign_id=campaign_id, graph=arr)
+        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb=verb, campaign_id=campaign_id, graph=arr, campaigncount = len(campaigns))
 
 
     @tornado.gen.coroutine
@@ -72,7 +72,7 @@ class CampaignsHandler(tornado.web.RequestHandler):
         while (yield cursor.fetch_next()):
             campaign = yield cursor.next()
             arr.append({'label':campaign['name'], 'value':campaign.get('points',0)})
-        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb="Create New Campaign", campaign_id=campaign_id, graph=arr)
+        self.render('campaign/index.html', campaigns=campaigns, messages=messages, name=name, verb="Create New Campaign", campaign_id=campaign_id, graph=arr, campaigncount = len(campaigns))
 
     def getSpecificCampaign(self, default=''):
         return {

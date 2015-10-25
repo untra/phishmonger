@@ -29,7 +29,8 @@ class TargetHandler(tornado.web.RequestHandler):
         if targets is None:
             messages.append('No Targets to Display!')
             targets = []
-        self.render('target/index.html', targets=targets, messages=messages, name=name, verb=verb, specific=specific)
+        campaigncount = yield r.table('Campaign').count().run(conn)
+        self.render('target/index.html', targets=targets, messages=messages, name=name, verb=verb, specific=specific, campaigncount = campaigncount)
 
 
     @tornado.gen.coroutine
@@ -53,7 +54,8 @@ class TargetHandler(tornado.web.RequestHandler):
         if targets is None:
             messages.append('No Targets to Display!')
             targets = []
-        self.render('target/index.html', targets=targets, messages=messages, name=name, verb="Create New Target", specific=self.getSpecificTarget())
+        campaigncount = yield r.table('Campaign').count().run(conn)
+        self.render('target/index.html', targets=targets, messages=messages, name=name, verb="Create New Target", specific=self.getSpecificTarget(), campaigncount=campaigncount)
 
     def getSpecificTarget(self, default=''):
         return {

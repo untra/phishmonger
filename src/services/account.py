@@ -3,8 +3,6 @@ import subprocess
 import json
 
 #new_person = account.Account({'phone': 2145426078 , 'fname':'John','lname':'Travolta','is_modo_terms_agree':1})
-
-
 class Account:
 
     def __init__(self, post_data):
